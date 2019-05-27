@@ -59,9 +59,9 @@ router.post(
     const projectFields = {};
     if (req.body.title) projectFields.title = req.body.title;
     if (req.body.country) projectFields.country = req.body.country;
+    if (req.body.email) projectFields.email = req.body.email;
     if (req.body.organizer) projectFields.organizer = req.body.organizer;
     if (req.body.thematic) projectFields.thematic = req.body.thematic;
-    if (req.body.contact) projectFields.contact = req.body.contact;
     if (req.body.description) projectFields.description = req.body.description;
     if (req.body.document) projectFields.document = req.body.document;
 
@@ -88,9 +88,9 @@ router.put(
     const projectFields = {};
     if (req.body.title) projectFields.title = req.body.title;
     if (req.body.country) projectFields.country = req.body.country;
+    if (req.body.email) projectFields.email = req.body.email;
     if (req.body.organizer) projectFields.organizer = req.body.organizer;
     if (req.body.thematic) projectFields.thematic = req.body.thematic;
-    if (req.body.contact) projectFields.contact = req.body.contact;
     if (req.body.description) projectFields.description = req.body.description;
     if (req.body.document) projectFields.document = req.body.document;
 
