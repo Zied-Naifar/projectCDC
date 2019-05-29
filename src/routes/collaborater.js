@@ -1,7 +1,32 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const fs = require("fs");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
 
 // Load Validation
 const validateCollaboraterInput = require("../validation/collaborater");
@@ -48,6 +73,7 @@ router.get("/:id", (req, res) => {
 // @access  Private
 router.post(
   "/create",
+  upload.single("photo"),
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateCollaboraterInput(req.body);
@@ -64,6 +90,7 @@ router.post(
     if (req.body.country) collaboraterFields.country = req.body.country;
     if (req.body.chief) collaboraterFields.chief = req.body.chief;
     if (req.body.bio) collaboraterFields.bio = req.body.bio;
+    if (req.file) collaboraterFields.photo = req.file.path;
 
     new Collaborater(collaboraterFields)
       .save()
@@ -76,6 +103,7 @@ router.post(
 // @access  Private
 router.put(
   "/update/:id",
+  upload.single("photo"),
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateCollaboraterInput(req.body);
@@ -92,6 +120,7 @@ router.put(
     if (req.body.country) collaboraterFields.country = req.body.country;
     if (req.body.chief) collaboraterFields.chief = req.body.chief;
     if (req.body.bio) collaboraterFields.bio = req.body.bio;
+    if (req.file) collaboraterFields.photo = req.file.path;
 
     Collaborater.findOneAndUpdate(
       { _id: req.params.id },
