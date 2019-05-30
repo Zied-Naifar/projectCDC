@@ -31,7 +31,7 @@ router.get("/all", (req, res) => {
 });
 
 // @route   GET api/project/:id
-// @desc    Get offre by id
+// @desc    Get project by id
 // @access  Public
 router.get("/:id", (req, res) => {
   Project.findOne({ _id: req.params.id })
